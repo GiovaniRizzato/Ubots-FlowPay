@@ -35,52 +35,35 @@ public class AtendimentoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Atendimento.AtendimentoGetDto> getById (@PathVariable("id") final Long id) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(atendimentoService.getById(id).getDto());
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(atendimentoService.getById(id).getDto());
     }
 
     @PostMapping
     public ResponseEntity<Atendimento.AtendimentoGetDto> create (@RequestBody @Validated Atendimento.AtendimentoCreateDto createDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(atendimentoService.create(createDto).getDto());
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(atendimentoService.create(createDto).getDto());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Atendimento.AtendimentoGetDto> edit (@PathVariable("id") final Long id, @RequestBody Atendimento.AtendimentoEditDto editDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(atendimentoService.edit(id, editDto).getDto());
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(atendimentoService.edit(id, editDto).getDto());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove (@PathVariable("id") final Long id) {
-        try {
-            atendimentoService.remove(id);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        atendimentoService.remove(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> noSuchElementExceptionException(NoSuchElementException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
     }
 }

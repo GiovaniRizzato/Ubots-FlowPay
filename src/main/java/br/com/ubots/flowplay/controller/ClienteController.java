@@ -29,60 +29,49 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente.ClienteGetDto> getById (@PathVariable("id") final Long id) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(clienteService.getById(id).getDto());
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clienteService.getById(id).getDto());
     }
 
     @PostMapping
     public ResponseEntity<Cliente.ClienteGetDto> create (@RequestBody @Validated Cliente.ClienteCreateDto createDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(clienteService.create(createDto).getDto());
-        } catch (IllegalArgumentException e){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity
-                    .status(HttpStatus.ALREADY_REPORTED)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clienteService.create(createDto).getDto());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente.ClienteGetDto> edit (@PathVariable("id") final Long id, @RequestBody Cliente.ClienteEditDto editDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(clienteService.edit(id, editDto).getDto());
-        } catch (IllegalArgumentException e){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity
-                    .status(HttpStatus.ALREADY_REPORTED)
-                    .build();
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clienteService.edit(id, editDto).getDto());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove (@PathVariable("id") final Long id) {
-        try {
-            clienteService.remove(id);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        clienteService.remove(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> noSuchElementExceptionException(NoSuchElementException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("Cliente com 'id' não encontrado");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> dataIntegrityViolationException(DataIntegrityViolationException e) {
+        return ResponseEntity
+                .status(HttpStatus.ALREADY_REPORTED)
+                .body("CPF já cadastrado");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> illegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
     }
 }

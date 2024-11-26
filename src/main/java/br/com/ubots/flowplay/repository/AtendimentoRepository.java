@@ -8,5 +8,5 @@ import java.util.Collection;
 
 @Repository
 public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {
-    Collection<Atendimento> findAllByAssunto(Atendimento.Assunto assunto);
+    Collection<Atendimento> findAllBySetor(Atendimento.Setor setor);
 }

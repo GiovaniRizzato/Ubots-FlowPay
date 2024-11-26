@@ -9,15 +9,45 @@ import lombok.*;
 @NoArgsConstructor
 public class Atendimento {
 
-    public enum Assunto{
+    public enum Setor {
         CARTAO,
         EMPRESTIMO,
         OUTROS
     }
 
-    public record AtendimentoGetDto(Long id, String titulo, String descricao, Assunto assunto, Cliente.ClienteGetDto cliente) {}
-    public record AtendimentoCreateDto(String titulo, String descricao, Assunto assunto, Long clienteId) {}
-    public record AtendimentoEditDto(String titulo, String descricao, Assunto assunto, Long clienteId) {}
+    public enum Status{
+        ABERTO,
+        EM_ATENDIMENTO,
+        RESOLVIDO
+    }
+
+    public record AtendimentoGetShortDto(
+            Long id,
+            String titulo,
+            String descricao,
+            Setor setor,
+            Status status) {}
+
+    public record AtendimentoGetFullDto(
+            Long id,
+            String titulo,
+            String descricao,
+            Setor setor,
+            Cliente.ClienteGetDto cliente,
+            Status status,
+            Atendente.AtendenteGetShortDto atendente) {}
+    public record AtendimentoCreateDto(
+            String titulo,
+            String descricao,
+            Setor setor,
+            Long clienteId) {}
+    public record AtendimentoEditDto(
+            String titulo,
+            String descricao,
+            Setor setor,
+            Long clienteId,
+            Status status,
+            Long  atendenteId) {}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -28,32 +58,59 @@ public class Atendimento {
     private String descricao;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Assunto assunto;
+    private Atendimento.Setor setor;
     @NotNull
     @ManyToOne
     private Cliente cliente;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @ManyToOne
+    private Atendente atendente;
 
-    public AtendimentoGetDto getDto(){
-        return new AtendimentoGetDto(
+    public void setStatus(Status status){
+        if(status.equals(Status.EM_ATENDIMENTO)){
+            throw new IllegalStateException("Não há atendente para iniciar o atendimento");
+        }
+
+        this.status = status;
+    }
+
+    public AtendimentoGetShortDto getShortDto(){
+        return new AtendimentoGetShortDto(
                 this.id,
                 this.titulo,
                 this.descricao,
-                this.assunto,
-                this.cliente.getDto());
+                this.setor,
+                this.status);
+    }
+
+    public AtendimentoGetFullDto getFullDto(){
+        return new AtendimentoGetFullDto(
+                this.id,
+                this.titulo,
+                this.descricao,
+                this.setor,
+                this.cliente.getDto(),
+                this.status,
+                this.atendente != null ? this.atendente.getShortDto() : null);
     }
 
     public Atendimento(AtendimentoCreateDto createDto, Cliente cliente){
         this.setTitulo(createDto.titulo);
         this.setDescricao(createDto.descricao);
-        this.setAssunto(createDto.assunto);
+        this.setSetor(createDto.setor);
         this.setCliente(cliente);
+        this.setStatus(Status.ABERTO);
     }
 
     public Atendimento updateUsingDto(AtendimentoEditDto editDto, Cliente cliente){
         this.setTitulo(editDto.titulo);
         this.setDescricao(editDto.descricao);
-        this.setAssunto(editDto.assunto);
+        this.setSetor(editDto.setor);
         this.setCliente(cliente);
+        this.setAtendente(atendente);
+        this.setStatus(editDto.status);
         return this;
     }
 }

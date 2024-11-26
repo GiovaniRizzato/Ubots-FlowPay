@@ -21,8 +21,8 @@ public class AtendimentoService {
         return this.repository.findAll();
     }
 
-    public Collection<Atendimento> getAllByAssunto(Atendimento.Assunto assunto) {
-        return this.repository.findAllByAssunto(assunto);
+    public Collection<Atendimento> getAllBySetor(Atendimento.Setor setor) {
+        return this.repository.findAllBySetor(setor);
     }
 
     public Atendimento getById(Long id) throws NoSuchElementException {

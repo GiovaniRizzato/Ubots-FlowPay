@@ -21,11 +21,11 @@ public class ClienteService{
         return this.repository.findById(id).orElseThrow();
     }
 
-    public Cliente create(Cliente.CreateDto createDTO) {
+    public Cliente create(Cliente.ClienteCreateDto createDTO) {
         return this.repository.save(new Cliente(createDTO));
     }
 
-    public Cliente edit(Long id, Cliente.EditDto editDto) {
+    public Cliente edit(Long id, Cliente.ClienteEditDto editDto) {
         return this.repository.save(this.getById(id).updateUsingDto(editDto));
     }
 

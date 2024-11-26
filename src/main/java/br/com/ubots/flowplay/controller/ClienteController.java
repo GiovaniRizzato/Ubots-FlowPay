@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cliente")
@@ -18,35 +19,35 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<Collection<Cliente.GetDto>> getAllProduto () {
+    public ResponseEntity<Collection<Cliente.ClienteGetDto>> getAll () {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clienteService.getAll().stream().map(Cliente::getDto).toList());
+                .body(clienteService.getAll().stream().map(Cliente::getDto).collect(Collectors.toSet()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente.GetDto> getProdutoById (@PathVariable("id") final Long id) {
+    public ResponseEntity<Cliente.ClienteGetDto> getById (@PathVariable("id") final Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteService.getById(id).getDto());
     }
 
     @PostMapping
-    public ResponseEntity<Cliente.GetDto> getAllProduto (@RequestBody @Validated Cliente.CreateDto createDto) {
+    public ResponseEntity<Cliente.ClienteGetDto> create (@RequestBody @Validated Cliente.ClienteCreateDto createDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteService.create(createDto).getDto());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente.GetDto> editProduto (@PathVariable("id") final Long id, @RequestBody Cliente.EditDto editDto) {
+    public ResponseEntity<Cliente.ClienteGetDto> edit (@PathVariable("id") final Long id, @RequestBody Cliente.ClienteEditDto editDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteService.edit(id, editDto).getDto());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeProduto (@PathVariable("id") final Long id) {
+    public ResponseEntity<Void> remove (@PathVariable("id") final Long id) {
         clienteService.remove(id);
         return ResponseEntity.ok().build();
     }

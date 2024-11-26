@@ -12,9 +12,9 @@ import java.util.InputMismatchException;
 @NoArgsConstructor
 public class Cliente {
 
-    public record GetDto(Long id, String nome, String cpf) {}
-    public record CreateDto(String nome, String cpf) {}
-    public record EditDto(String nome, String cpf) {}
+    public record ClienteGetDto(Long id, String nome, String cpf) {}
+    public record ClienteCreateDto(String nome, String cpf) {}
+    public record ClienteEditDto(String nome, String cpf) {}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -26,18 +26,18 @@ public class Cliente {
     @Column(unique=true)
     private String cpf;
 
-    public GetDto getDto(){
-        return new GetDto(this.id, this.nome, this.cpf);
+    public ClienteGetDto getDto(){
+        return new ClienteGetDto(this.id, this.nome, this.cpf);
     }
 
 
-    public Cliente(CreateDto createDto){
-        //this.setNome(createDto.nome);
+    public Cliente(ClienteCreateDto createDto){
+        this.setNome(createDto.nome);
         this.setCpf(createDto.cpf);
     }
 
-    public Cliente updateUsingDto(EditDto editDto){
-        //this.setNome(editDto.nome);
+    public Cliente updateUsingDto(ClienteEditDto editDto){
+        this.setNome(editDto.nome);
         this.setCpf(editDto.cpf);
         return this;
     }

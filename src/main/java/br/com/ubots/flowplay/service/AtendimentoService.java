@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 @Service
 public class AtendimentoService {
@@ -24,19 +25,19 @@ public class AtendimentoService {
         return this.repository.findAllByAssunto(assunto);
     }
 
-    public Atendimento getById(Long id) {
+    public Atendimento getById(Long id) throws NoSuchElementException {
         return this.repository.findById(id).orElseThrow();
     }
 
-    public Atendimento create(Atendimento.AtendimentoCreateDto createDTO) {
+    public Atendimento create(Atendimento.AtendimentoCreateDto createDTO) throws NoSuchElementException {
         return this.repository.save(new Atendimento(createDTO, clienteService.getById(createDTO.clienteId())));
     }
 
-    public Atendimento edit(Long id, Atendimento.AtendimentoEditDto editDto) {
+    public Atendimento edit(Long id, Atendimento.AtendimentoEditDto editDto) throws NoSuchElementException {
         return this.repository.save(this.getById(id).updateUsingDto(editDto, clienteService.getById(editDto.clienteId())));
     }
 
-    public void remove(Long id) {
+    public void remove(Long id) throws NoSuchElementException {
         this.repository.delete(this.getById(id));
     }
 }

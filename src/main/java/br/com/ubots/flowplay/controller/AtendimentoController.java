@@ -23,41 +23,55 @@ public class AtendimentoController {
     public ResponseEntity<Collection<Atendimento.AtendimentoGetShortDto>> getAll () {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getAll().stream().map(Atendimento::getShortDto).collect(Collectors.toSet()));
+                .body(this.atendimentoService.getAll().stream().map(Atendimento::getShortDto).collect(Collectors.toSet()));
     }
 
     @GetMapping("/setor/{setor}")
     public ResponseEntity<Collection<Atendimento.AtendimentoGetShortDto>> getAllBySetor (@PathVariable("setor") final Atendimento.Setor setor) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getAllBySetor(setor).stream().map(Atendimento::getShortDto).collect(Collectors.toSet()));
+                .body(this.atendimentoService.getAllBySetor(setor).stream().map(Atendimento::getShortDto).collect(Collectors.toSet()));
+    }
+
+    @GetMapping("/atendente/{atendenteId}")
+    public ResponseEntity<Collection<Atendimento.AtendimentoGetShortDto>> getAllByAtendente (@PathVariable("atendenteId") final Long atendenteId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.atendimentoService.getAllByAtendente(atendenteId).stream().map(Atendimento::getShortDto).collect(Collectors.toSet()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Atendimento.AtendimentoGetFullDto> getById (@PathVariable("id") final Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getById(id).getFullDto());
+                .body(this.atendimentoService.getById(id).getFullDto());
     }
 
     @PostMapping
-    public ResponseEntity<Atendimento.AtendimentoGetFullDto> create (@RequestBody @Validated Atendimento.AtendimentoCreateDto createDto) {
+    public ResponseEntity<Atendimento.AtendimentoGetFullDto> create (@RequestBody @Validated Atendimento.AtendimentoCreateDto createDto) throws IllegalAccessException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.create(createDto).getFullDto());
+                .body(this.atendimentoService.create(createDto).getFullDto());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Atendimento.AtendimentoGetFullDto> edit (@PathVariable("id") final Long id, @RequestBody Atendimento.AtendimentoEditDto editDto) {
+    public ResponseEntity<Atendimento.AtendimentoGetFullDto> edit (@PathVariable("id") final Long id, @RequestBody Atendimento.AtendimentoEditDto editDto) throws IllegalAccessException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.edit(id, editDto).getFullDto());
+                .body(this.atendimentoService.edit(id, editDto).getFullDto());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove (@PathVariable("id") final Long id) {
-        atendimentoService.remove(id);
+        this.atendimentoService.remove(id);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<String> illegalAccessException(IllegalAccessException e) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(NoSuchElementException.class)

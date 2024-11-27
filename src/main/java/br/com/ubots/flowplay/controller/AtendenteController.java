@@ -24,40 +24,40 @@ public class AtendenteController {
     public ResponseEntity<Collection<Atendente.AtendenteGetShortDto>> getAll () {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getAll().stream().map(Atendente::getShortDto).collect(Collectors.toSet()));
+                .body(this.atendimentoService.getAll().stream().map(Atendente::getShortDto).collect(Collectors.toSet()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Atendente.AtendenteGetFullDto> getById (@PathVariable("id") final Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getById(id).getFullDto());
+                .body(this.atendimentoService.getById(id).getFullDto());
     }
 
     @GetMapping("/setor/{setor}/avalible")
     public ResponseEntity<Collection<Atendente.AtendenteGetShortDto>> getAvalibleBySetor (@PathVariable("setor") final Atendimento.Setor setor) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.getAllAvalible(setor).stream().map(Atendente::getShortDto).collect(Collectors.toSet()));
+                .body(this.atendimentoService.getAllAvalible(setor).stream().map(Atendente::getShortDto).collect(Collectors.toSet()));
     }
 
     @PostMapping
     public ResponseEntity<Atendente.AtendenteGetFullDto> create (@RequestBody @Validated Atendente.AtendenteCreateDto createDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.create(createDto).getFullDto());
+                .body(this.atendimentoService.create(createDto).getFullDto());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Atendente.AtendenteGetFullDto> edit (@PathVariable("id") final Long id, @RequestBody Atendente.AtendenteEditDto editDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(atendimentoService.edit(id, editDto).getFullDto());
+                .body(this.atendimentoService.edit(id, editDto).getFullDto());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove (@PathVariable("id") final Long id) {
-        atendimentoService.remove(id);
+        this.atendimentoService.remove(id);
         return ResponseEntity.ok().build();
     }
 

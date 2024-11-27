@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,7 @@ public class Atendente {
     public record AtendenteGetShortDto(Long id, String nome, Atendimento.Setor setor) {}
     public record AtendenteGetFullDto(Long id, String nome, Atendimento.Setor setor, Set<Atendimento.AtendimentoGetShortDto> atendimentos) {}
     public record AtendenteCreateDto(String nome, Atendimento.Setor setor) {}
-    public record AtendenteEditDto(String nome, Atendimento.Setor setor, Long[] atendimentos) {}
+    public record AtendenteEditDto(String nome, Atendimento.Setor setor) {}
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -29,8 +29,13 @@ public class Atendente {
     @NotNull
     private Atendimento.Setor setor;
 
-    @OneToMany
-    private Set<Atendimento> atendimentos = new HashSet<>();
+    @OneToMany(mappedBy = "atendente")
+    private List<Atendimento> atendimentos;
+
+    private void setAtendimento(Set<Atendimento> atendimentos){
+        //Setando o metodo de "set" para evitar de ser alterado fora desta classe,
+        //O atendimento é iniciado atravez de edição da classe "Atendimento"
+    }
 
     public AtendenteGetShortDto getShortDto(){
         return new AtendenteGetShortDto(this.id, this.nome, this.setor);
@@ -41,11 +46,10 @@ public class Atendente {
                 this.id,
                 this.nome,
                 this.setor,
-                this.atendimentos.stream()
+                this.atendimentos != null ? this.atendimentos.stream()
                         .map(Atendimento::getShortDto)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet()) : null);
     }
-
 
     public Atendente(AtendenteCreateDto createDto){
         this.setNome(createDto.nome);

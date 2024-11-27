@@ -6,19 +6,14 @@ import br.com.ubots.flowplay.repository.AtendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class AtendenteService {
 
     @Autowired
     private AtendenteRepository repository;
-
-    @Autowired
-    private AtendimentoService atendimentoService;
 
     public Collection<Atendente> getAll() {
         return this.repository.findAll();
@@ -38,7 +33,6 @@ public class AtendenteService {
 
     public Atendente edit(Long id, Atendente.AtendenteEditDto editDto) throws NoSuchElementException {
         final Atendente atendente = this.getById(id).updateUsingDto(editDto);
-        atendente.setAtendimentos(Arrays.stream(editDto.atendimentos()).map(atId -> this.atendimentoService.getById(atId)).collect(Collectors.toSet()));
         return this.repository.save(atendente);
     }
 

@@ -22,6 +22,7 @@ public class Cliente {
 
     @NotNull
     private String nome;
+
     @NotNull
     @Column(unique=true)
     private String cpf;
@@ -46,7 +47,11 @@ public class Cliente {
         if(!Cliente.isCpfValido(cpf)){
             throw new IllegalArgumentException("CPF inválido");
         }
-        this.cpf = Cliente.imprimeCPF(cpf);
+        this.cpf = cpf;
+    }
+
+    public String getCpf(){
+        return Cliente.imprimeCPF(this.cpf);
     }
 
     public static boolean isCpfValido(String cpf){

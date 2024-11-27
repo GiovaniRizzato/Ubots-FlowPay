@@ -12,6 +12,8 @@ import java.util.NoSuchElementException;
 @Service
 public class AtendenteService {
 
+    final public static Integer MAX_ATENDIMENTOS_POR_ATENDENTE = 3;
+
     @Autowired
     private AtendenteRepository repository;
 
@@ -20,7 +22,7 @@ public class AtendenteService {
     }
 
     public Collection<Atendente> getAllAvalible(Atendimento.Setor setor) {
-        return this.repository.findAllAvalibleBySetor(setor, 2);
+        return this.repository.findAllAvalibleBySetor(setor, AtendenteService.MAX_ATENDIMENTOS_POR_ATENDENTE);
     }
 
     public Atendente getById(Long id) throws NoSuchElementException {

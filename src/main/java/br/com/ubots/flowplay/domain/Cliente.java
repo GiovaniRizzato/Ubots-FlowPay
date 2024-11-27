@@ -38,8 +38,8 @@ public class Cliente {
     }
 
     public Cliente updateUsingDto(ClienteEditDto editDto){
-        this.setNome(editDto.nome);
-        this.setCpf(editDto.cpf);
+        if(editDto.nome() != null) this.setNome(editDto.nome());
+        if(editDto.cpf() != null) this.setCpf(editDto.cpf());
         return this;
     }
 

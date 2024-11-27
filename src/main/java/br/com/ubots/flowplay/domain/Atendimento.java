@@ -83,6 +83,14 @@ public class Atendimento {
         this.criadoEm = newDate;
     }
 
+    public void setSetor(Setor setor){
+        if(!this.status.equals(Status.ABERTO)){
+            throw new IllegalArgumentException("Só se pode mudar o setor de atendimentos com status 'ABERTO'");
+        }
+
+        this.setor = setor;
+    }
+
     public void setAtendente(Atendente atendente) throws IllegalStateException{
         if(!this.setor.equals(atendente.getSetor())){
             throw new IllegalStateException("Atendente não está no mesmo setor que este atendimento");
@@ -106,7 +114,6 @@ public class Atendimento {
                         this.atendente = null;
                     }
                 }
-                case RESOLVIDO -> throw new IllegalAccessException("Atendimento resolvido");
             }
         }
 
@@ -143,10 +150,13 @@ public class Atendimento {
     }
 
     public Atendimento updateUsingDto(AtendimentoEditDto editDto, Cliente cliente, Atendente atendente) throws IllegalAccessException {
-        this.setTitulo(editDto.titulo);
-        this.setDescricao(editDto.descricao);
-        this.setSetor(editDto.setor);
-        this.setStatus(editDto.status);
+        if(this.getStatus().equals(Status.RESOLVIDO)){
+            throw new IllegalAccessException("Atendimento resolvido não podem ser alterados");
+        }
+        if(editDto.titulo() != null) this.setTitulo(editDto.titulo());
+        if(editDto.descricao() != null) this.setDescricao(editDto.descricao());
+        if(editDto.setor() != null) this.setSetor(editDto.setor());
+        if(editDto.status() != null) this.setStatus(editDto.status());
         if(cliente != null) this.setCliente(cliente);
         if(atendente != null) this.setAtendente(atendente);
         return this;

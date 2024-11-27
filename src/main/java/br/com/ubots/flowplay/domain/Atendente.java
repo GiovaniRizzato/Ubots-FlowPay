@@ -57,8 +57,8 @@ public class Atendente {
     }
 
     public Atendente updateUsingDto(AtendenteEditDto editDto){
-        this.setNome(editDto.nome);
-        this.setSetor(editDto.setor);
+        if(editDto.nome() != null) this.setNome(editDto.nome());
+        if(editDto.setor() != null) this.setSetor(editDto.setor());
         return this;
     }
 }

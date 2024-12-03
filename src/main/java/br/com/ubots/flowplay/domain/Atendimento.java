@@ -84,7 +84,7 @@ public class Atendimento {
     }
 
     public void setSetor(Setor setor){
-        if(!this.status.equals(Status.ABERTO)){
+        if((this.status != null) && !this.status.equals(Status.ABERTO)){
             throw new IllegalArgumentException("Só se pode mudar o setor de atendimentos com status 'ABERTO'");
         }
 
@@ -100,7 +100,7 @@ public class Atendimento {
         this.atendente = atendente;
     }
 
-    private void setStatus(Status status) throws IllegalStateException, IllegalAccessException {
+    private void setStatus(Status status) throws IllegalStateException {
         if (this.status != null) {
             switch (this.status) {
                 case ABERTO -> {

@@ -17,7 +17,7 @@ All the data is stored in a temporary memory-based database, so we have all the 
 
 1. Clone this repository to your computer:
    ```bash
-   git clone https://github.com/GiovaniRizzato/pior-filme-backend.git
+   git clone https://github.com/GiovaniRizzato/Ubots-FlowPay
    ```
 2. Run the application using the Springboot IDE of your choice or enter the commands:
    ```bash

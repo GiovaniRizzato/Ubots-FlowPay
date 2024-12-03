@@ -24,3 +24,14 @@ All the data is stored in a temporary memory-based database, so we have all the 
    mvn dependency:resolve
    mvn spring-boot:run
    ```
+
+## Using Consoles :clipboard:
+
+Swagger: at \[localhost:port]/swagger-ui/index.html
+![Swagger dashboard](Documentation/swagger-dashboard.jpg)
+
+H2 Dashboard: \[localhost:port]/h2-console
+![H2 database dashboard](Documentation/h2-dashboard.jpg)
+
+
+

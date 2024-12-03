@@ -1,6 +1,5 @@
 # Ubots FlowPlay
 
-
 FlowPay is a backend solution for a relationship center.
 This central The relationship will meet different types of customer requests. The main types of transactions are like card problems and taking out a loan, according to the specification presented in [Documentation (pt-BR)](Documentation/Especificacao.pdf).
 
